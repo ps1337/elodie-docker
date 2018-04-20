@@ -1,0 +1,10 @@
+input
+**/input
+input/*
+output
+**/output
+output/*
+config
+**/config
+config/*
+
