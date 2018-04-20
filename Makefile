@@ -28,7 +28,7 @@ run: ## Run container
 	-it \
 	--rm \
 	--name $(CONTAINER_NAME) \
-	-v $(DIR)/config:/elodie/.elodie \
+	-v $(DIR)/config:/home/elodie/.elodie \
 	-v $(DIR)/input:/var/input:ro \
 	-v $(DIR)/output:/var/output \
 	--entrypoint sh \
