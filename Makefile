@@ -3,6 +3,9 @@ VERSION ?= latest
 
 # The directory of this file
 DIR := $(shell echo $(shell cd "$(shell  dirname "${BASH_SOURCE[0]}" )" && pwd ))
+UID := $(shell id -u)
+GID := $(shell id -g)
+
 
 IMAGE_NAME ?= ps1337/elodie-docker
 CONTAINER_NAME ?= elodie
@@ -18,10 +21,10 @@ help: ## This help
 
 # Build the container
 build: ## Build the container
-	docker build --rm -t $(IMAGE_NAME) .
+	sudo docker build --rm -t $(IMAGE_NAME) .
 
 build-nc: ## Build the container without caching
-	docker build --rm --no-cache -t $(IMAGE_NAME) .
+	sudo docker build --rm --no-cache -t $(IMAGE_NAME) .
 
 run: ## Run container
 	sudo docker run \
@@ -31,15 +34,16 @@ run: ## Run container
 	-v $(DIR)/config:/home/elodie/.elodie \
 	-v $(DIR)/input:/var/input:ro \
 	-v $(DIR)/output:/var/output \
-	--entrypoint sh \
+	-e PUID=$(UID) \
+	-e PGID=$(GID) \
 	$(IMAGE_NAME):$(VERSION)
 
 stop: ## Stop a running container
-	docker stop $(CONTAINER_NAME)
+	sudo docker stop $(CONTAINER_NAME)
 
 remove: ## Remove a (running) container
-	docker rm -f $(CONTAINER_NAME)
+	sudo docker rm -f $(CONTAINER_NAME)
 
 remove-image-force: ## Remove the latest image (forced)
-	docker rmi -f $(IMAGE_NAME):$(VERSION)
+	sudo docker rmi -f $(IMAGE_NAME):$(VERSION)
 
